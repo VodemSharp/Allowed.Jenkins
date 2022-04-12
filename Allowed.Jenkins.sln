@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{8F23220F-9640-4DB3-BD6F-1AD0040C34EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{3C883490-A314-4B9C-9676-1F7806A98A07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{05F1D35A-D8C7-4918-8108-947EB3B9AA9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allowed.Jenkins.Server", "Allowed.Jenkins.Server\Allowed.Jenkins.Server.csproj", "{5FF3967F-CAA0-4D6A-B406-6E42586845E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allowed.Jenkins.Client", "Allowed.Jenkins.Client\Allowed.Jenkins.Client.csproj", "{9855F738-D805-4324-87CB-20D41CDC0478}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allowed.Jenkins.Common", "Allowed.Jenkins.Common\Allowed.Jenkins.Common.csproj", "{9E5CE478-910E-4D62-BDAF-368D29E8BA10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5FF3967F-CAA0-4D6A-B406-6E42586845E2} = {3C883490-A314-4B9C-9676-1F7806A98A07}
+		{9855F738-D805-4324-87CB-20D41CDC0478} = {8F23220F-9640-4DB3-BD6F-1AD0040C34EF}
+		{9E5CE478-910E-4D62-BDAF-368D29E8BA10} = {05F1D35A-D8C7-4918-8108-947EB3B9AA9D}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FF3967F-CAA0-4D6A-B406-6E42586845E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF3967F-CAA0-4D6A-B406-6E42586845E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF3967F-CAA0-4D6A-B406-6E42586845E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF3967F-CAA0-4D6A-B406-6E42586845E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9855F738-D805-4324-87CB-20D41CDC0478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9855F738-D805-4324-87CB-20D41CDC0478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9855F738-D805-4324-87CB-20D41CDC0478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9855F738-D805-4324-87CB-20D41CDC0478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E5CE478-910E-4D62-BDAF-368D29E8BA10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E5CE478-910E-4D62-BDAF-368D29E8BA10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E5CE478-910E-4D62-BDAF-368D29E8BA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E5CE478-910E-4D62-BDAF-368D29E8BA10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
