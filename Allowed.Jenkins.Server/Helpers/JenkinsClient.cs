@@ -25,6 +25,16 @@ public static class JenkinsClient
     {
         SSHHelper.RunCommand(client, $"{_jenkinsClient} StopSite \"{siteName}\"");
     }
+    
+    public static void StartService(SshClient client, string serviceName)
+    {
+        SSHHelper.RunCommand(client, $"{_jenkinsClient} StartService \"{serviceName}\"");
+    }
+
+    public static void StopService(SshClient client, string serviceName)
+    {
+        SSHHelper.RunCommand(client, $"{_jenkinsClient} StopService \"{serviceName}\"");
+    }
 
     public static void UnZipAndMove(SshClient client, string sitePath)
     {

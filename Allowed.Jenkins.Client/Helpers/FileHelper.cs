@@ -1,7 +1,12 @@
-﻿namespace Allowed.Jenkins.Client.Helpers;
+﻿using System.Runtime.InteropServices;
+
+namespace Allowed.Jenkins.Client.Helpers;
 
 public static class FileHelper
 {
+    const int ERROR_SHARING_VIOLATION = 32;
+    const int ERROR_LOCK_VIOLATION = 33;
+
     public static void DirectoryCopy(string sourceDirName, string destDirName)
     {
         // Get the subdirectories for the specified directory.
@@ -18,10 +23,25 @@ public static class FileHelper
 
         // Get the files in the directory and copy them to the new location.
         var files = dir.GetFiles();
-        foreach (var file in files)
+        for (var i = 0; i < files.Length; i++)
         {
+            var file = files[i];
             var temppath = Path.Combine(destDirName, file.Name);
-            file.CopyTo(temppath, true);
+
+            try
+            {
+                file.CopyTo(temppath, true);
+            }
+            catch (Exception ex)
+            {
+                // If file not locker throw exception
+                var errorCode = Marshal.GetHRForException(ex) & ((1 << 16) - 1);
+                if (ex is not IOException || errorCode is not (ERROR_SHARING_VIOLATION or ERROR_LOCK_VIOLATION))
+                    throw;
+
+                Task.Delay(100);
+                i--;
+            }
         }
 
         foreach (var subdir in dirs)

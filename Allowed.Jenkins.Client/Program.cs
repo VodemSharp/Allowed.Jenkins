@@ -1,39 +1,77 @@
 ﻿using System.IO.Compression;
+using System.ServiceProcess;
 using Allowed.Jenkins.Client.Helpers;
-using Allowed.Jenkins.Client.IIS;
+using Microsoft.Web.Administration;
 
-switch (args[0])
+var mode = args[0];
+
+switch (mode)
 {
-    // args[1] - site name
+// args[1] - site name
     case "StopSite":
-        await IISCommands.ChangeAppCmdState(args[1], AppCmdType.Site, false);
-        await IISCommands.ChangeAppCmdState(args[1], AppCmdType.AppPool, false);
-        break;
+    {
+        var serverManager = new ServerManager();
+        var site = serverManager.Sites[args[1]];
+        var pool = serverManager.ApplicationPools[args[1]];
 
+        if (site.State is ObjectState.Started or ObjectState.Starting)
+            site.Stop();
+        
+        if (pool.State is ObjectState.Started or ObjectState.Starting)
+            pool.Stop();
+        break;
+    }
     case "StartSite":
-        await IISCommands.ChangeAppCmdState(args[1], AppCmdType.AppPool, true);
-        await IISCommands.ChangeAppCmdState(args[1], AppCmdType.Site, true);
-        break;
-    //
+    {
+        var serverManager = new ServerManager();
+        var site = serverManager.Sites[args[1]];
+        var pool = serverManager.ApplicationPools[args[1]];
 
-    // args[1] - site path
+        if (pool.State is ObjectState.Stopped or ObjectState.Stopping)
+            pool.Start();
+        
+        if (site.State is ObjectState.Stopped or ObjectState.Stopping)
+            site.Start();
+        break;
+    }
+
+// args[1] - service name
+    case "StopService":
+    {
+        var service = new ServiceController(args[1]);
+        if (service.CanStop)
+            service.Stop();
+        break;
+    }
+    case "StartService":
+    {
+        var service = new ServiceController(args[1]);
+        if (service.Status is ServiceControllerStatus.Stopped or ServiceControllerStatus.StopPending)
+            service.Start();
+        break;
+    }
+
+// args[1] - site path
     case "CreateJenkinsFolder":
-        var jenkinsFolderCreate = $"{args[1]}\\jenkins";
+    {
+        var jenkinsFolder = $"{args[1]}\\jenkins";
 
-        if (Directory.Exists(jenkinsFolderCreate))
-            Directory.Delete(jenkinsFolderCreate, true);
+        if (Directory.Exists(jenkinsFolder))
+            Directory.Delete(jenkinsFolder, true);
 
-        Directory.CreateDirectory(jenkinsFolderCreate);
+        Directory.CreateDirectory(jenkinsFolder);
         break;
-
+    }
     case "RemoveJenkinsFolder":
-        var jenkinsFolderRemove = $"{args[1]}\\jenkins";
+    {
+        var jenkinsFolder = $"{args[1]}\\jenkins";
 
-        if (Directory.Exists(jenkinsFolderRemove))
-            Directory.Delete(jenkinsFolderRemove, true);
+        if (Directory.Exists(jenkinsFolder))
+            Directory.Delete(jenkinsFolder, true);
         break;
-
+    }
     case "UnZipAndMove":
+    {
         var jenkinsFolderZip = $"{args[1]}\\jenkins";
         var publishZip = Path.Combine(jenkinsFolderZip, "publish.zip");
 
@@ -41,7 +79,6 @@ switch (args[0])
         File.Delete(publishZip);
 
         FileHelper.DirectoryCopy(jenkinsFolderZip, args[1]);
-
         break;
-    //
+    }
 }
