@@ -11,17 +11,18 @@ args = args.Select(a =>
 if (args[0] == "IIS")
 {
     var workspace = args[1];
-    var project = args[2];
-    var environment = args[3];
-    var siteName = args[4];
-    var sitePath = args[5];
-    var host = args[6];
-    var username = args[7];
-    var password = args[8];
+    var projectPath = args[2];
+    var project = args[3];
+    var environment = args[4];
+    var siteName = args[5];
+    var sitePath = args[6];
+    var host = args[7];
+    var username = args[8];
+    var password = args[9];
 
     var buildPath = Path.Combine(workspace, project, "bin", "x64", "release", "net6.0");
-    var publishPath = Path.Combine(buildPath, "publish");
-    var projectPath = $"{workspace}\\{project}\\{project}.csproj";
+    var publishPath = Path.Combine(buildPath, "publish"); 
+    projectPath = $"{workspace}\\{projectPath}\\{project}.csproj";
 
     using (var client = new SshClient(host, username, password))
     {
@@ -66,16 +67,17 @@ if (args[0] == "IIS")
 else if (args[0] == "WS")
 {
     var workspace = args[1];
-    var project = args[2];
-    var siteName = args[3];
-    var sitePath = args[4];
-    var host = args[5];
-    var username = args[6];
-    var password = args[7];
+    var projectPath = args[2];
+    var project = args[3];
+    var siteName = args[4];
+    var sitePath = args[5];
+    var host = args[6];
+    var username = args[7];
+    var password = args[8];
 
     var releasePath = Path.Combine(workspace, project, "bin", "x64", "release");
     var buildPath = Path.Combine(releasePath, "net6.0");
-    var projectPath = $"{workspace}\\{project}\\{project}.csproj";
+    projectPath = $"{workspace}\\{projectPath}\\{project}.csproj";
 
     using (var client = new SshClient(host, username, password))
     {
