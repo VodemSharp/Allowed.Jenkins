@@ -11,18 +11,18 @@ args = args.Select(a =>
 if (args[0] == "IIS")
 {
     var workspace = args[1];
-    var projectPath = args[2];
-    var project = args[3];
-    var environment = args[4];
-    var siteName = args[5];
-    var sitePath = args[6];
+    var environment = args[2];
+    var projectPath = args[3];
+    var projectName = args[4];
+    var sitePath = args[5];
+    var siteName = args[6];
     var host = args[7];
     var username = args[8];
     var password = args[9];
 
-    var buildPath = Path.Combine(workspace, project, "bin", "x64", "release", "net6.0");
+    var buildPath = Path.Combine(workspace, projectName, "bin", "x64", "release", "net6.0");
     var publishPath = Path.Combine(buildPath, "publish"); 
-    projectPath = $"{workspace}\\{projectPath}\\{project}.csproj";
+    projectPath = $"{workspace}\\{projectPath}\\{projectName}.csproj";
 
     using (var client = new SshClient(host, username, password))
     {
@@ -68,22 +68,22 @@ else if (args[0] == "WS")
 {
     var workspace = args[1];
     var projectPath = args[2];
-    var project = args[3];
-    var siteName = args[4];
-    var sitePath = args[5];
+    var projectName = args[3];
+    var servicePath = args[4];
+    var serviceName = args[5];
     var host = args[6];
     var username = args[7];
     var password = args[8];
 
-    var releasePath = Path.Combine(workspace, project, "bin", "x64", "release");
+    var releasePath = Path.Combine(workspace, projectName, "bin", "x64", "release");
     var buildPath = Path.Combine(releasePath, "net6.0");
-    projectPath = $"{workspace}\\{projectPath}\\{project}.csproj";
+    projectPath = $"{workspace}\\{projectPath}\\{projectName}.csproj";
 
     using (var client = new SshClient(host, username, password))
     {
         client.Connect();
 
-        JenkinsClient.CreateJenkinsFolder(client, sitePath);
+        JenkinsClient.CreateJenkinsFolder(client, servicePath);
         await DotNetHelper.Restore(projectPath);
         await DotNetHelper.MSBuild(projectPath);
 
@@ -100,7 +100,7 @@ else if (args[0] == "WS")
         ZipFile.CreateFromDirectory(buildPath, Path.Combine(releasePath, "publish.zip"),
             CompressionLevel.Optimal, false);
         SSHHelper.UploadFile(client, Path.Combine(releasePath, "publish.zip"),
-            $"/{Path.Combine(sitePath, "jenkins", "publish.zip")}");
+            $"/{Path.Combine(servicePath, "jenkins", "publish.zip")}");
 
         client.Disconnect();
     }
@@ -109,11 +109,11 @@ else if (args[0] == "WS")
     {
         client.Connect();
 
-        JenkinsClient.StopService(client, siteName);
-        JenkinsClient.UnZipAndMove(client, sitePath);
-        JenkinsClient.StartService(client, siteName);
+        JenkinsClient.StopService(client, serviceName);
+        JenkinsClient.UnZipAndMove(client, servicePath);
+        JenkinsClient.StartService(client, serviceName);
 
-        JenkinsClient.RemoveJenkinsFolder(client, sitePath);
+        JenkinsClient.RemoveJenkinsFolder(client, servicePath);
 
         client.Disconnect();
     }
